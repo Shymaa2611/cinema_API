@@ -16,7 +16,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
+from  Movie_tickets import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('getGuest/api/',view=views.getGuest),
 ]

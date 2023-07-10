@@ -1,0 +1,12 @@
+GUEST
+  - name
+  - mobile
+
+MOVIE
+   - title
+   - hall_number
+   - price
+
+BOOK
+   - movie data => foreign key
+   - guest data => foreign key
