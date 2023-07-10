@@ -21,4 +21,5 @@ from  Movie_tickets import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('getGuest/api/',view=views.getGuest),
+    path('getGuest/api/<int:pk>/',view=views.GuestData),
 ]

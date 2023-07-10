@@ -22,10 +22,39 @@ def getGuest(request):
 @api_view(['GET','PUT','DELETE'])
 
 def GuestData(request,pk):
+    guests=Guest.objects.get(pk=pk)
     if request.method=='GET':
-       guests=Guest.objects.get(pk=pk)
        serializer=GuestSerializers(guests)
        return Response(serializer.data)
     elif request.method=='PUT':
         serializer=GuestSerializers(guests,data=request.data)
-  
+        if serializer.is_valid():
+           serializer.save()
+           return Response(serializer.data)
+        return Response(serializer.data,status=status.HTTP_400_BAD_REQUEST)
+    elif request.method=='DELETE':
+       guests.delete()
+       return Response(status=status.HTTP_204_NO_CONTENT)
+    
+api_view(['GET'])
+def search_Movie(request):
+   movie=Movie.objects.filter(
+      title=request.data['title']
+   )
+   serializer=MovieSerializers(movie,any=True)
+   return Response(serializer.data)
+api_view(['GET'])
+def Book(request):
+   movie=Movie.objects.filter(
+      title=request.data['title']
+   )
+   guest=Guest()
+   guest.name=request.data['name']
+   guest.mobile=request.data['mobile']
+   guest.save()
+   reservation = Book_ticket()
+   reservation.guest = guest
+   reservation.movie = movie
+   reservation.save()
+
+   return Response(status=status.HTTP_201_CREATED)
