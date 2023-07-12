@@ -22,4 +22,5 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('getGuest/api/',view=views.getGuest),
     path('getGuest/api/<int:pk>/',view=views.GuestData),
+    path('search/api/',view=views.search_Movie),
 ]

@@ -4,10 +4,12 @@ from rest_framework import status, filters
 from rest_framework.response import Response
 from .models import Guest,Movie,Book_ticket
 from .serializers import GuestSerializers,Book_ticket_Serializers,MovieSerializers
-
+from rest_framework.authentication import BasicAuthentication, TokenAuthentication
+from rest_framework.permissions import IsAuthenticated
 
 
 @api_view(['GET','POST'])
+#@authentication_classes([TokenAuthentication])
 def getGuest(request):
     if request.method=='GET':
         guests=Guest.objects.all()
@@ -36,17 +38,25 @@ def GuestData(request,pk):
        guests.delete()
        return Response(status=status.HTTP_204_NO_CONTENT)
     
-api_view(['GET'])
+@api_view(['GET'])
 def search_Movie(request):
-   movie=Movie.objects.filter(
-      title=request.data['title']
-   )
-   serializer=MovieSerializers(movie,any=True)
+   movie = Movie.objects.filter(
+      title = request.data['title']
+      )
+   #print("Title = ",title)
+   print("Movie = ",movie)
+   serializer = MovieSerializers(movie, many=True)
+   print(serializer.data)
    return Response(serializer.data)
+
+
+
+
+
 api_view(['GET'])
 def Book(request):
    movie=Movie.objects.filter(
-      title=request.data['title']
+   title = request.query_params.get('title', '')
    )
    guest=Guest()
    guest.name=request.data['name']
