@@ -1,15 +1,15 @@
 from django.shortcuts import render
-from rest_framework.decorators import api_view
+from rest_framework.decorators import api_view,authentication_classes,permission_classes
 from rest_framework import status, filters
 from rest_framework.response import Response
 from .models import Guest,Movie,Book_ticket
 from .serializers import GuestSerializers,Book_ticket_Serializers,MovieSerializers
-from rest_framework.authentication import BasicAuthentication, TokenAuthentication
+from rest_framework.authentication import  TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 
-
 @api_view(['GET','POST'])
-#@authentication_classes([TokenAuthentication])
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def getGuest(request):
     if request.method=='GET':
         guests=Guest.objects.all()
@@ -43,28 +43,28 @@ def search_Movie(request):
    movie = Movie.objects.filter(
       title = request.data['title']
       )
-   #print("Title = ",title)
-   print("Movie = ",movie)
    serializer = MovieSerializers(movie, many=True)
-   print(serializer.data)
    return Response(serializer.data)
 
 
 
 
 
-api_view(['GET'])
+@api_view(['POST'])
 def Book(request):
-   movie=Movie.objects.filter(
-   title = request.query_params.get('title', '')
-   )
-   guest=Guest()
-   guest.name=request.data['name']
-   guest.mobile=request.data['mobile']
+   movie = Movie.objects.get(
+        hall_number = request.data['hall_number'],
+        title = request.data['title'],
+    )
+   guest = Guest()
+   guest.name = request.data['name']
+   guest.mobile = request.data['mobile']
    guest.save()
    reservation = Book_ticket()
    reservation.guest = guest
    reservation.movie = movie
    reservation.save()
+   
 
-   return Response(status=status.HTTP_201_CREATED)
+   return Response({"message":"reservation is creaded successfully"},status=status.HTTP_201_CREATED)
+

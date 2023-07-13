@@ -15,5 +15,5 @@ class Movie(models.Model):
 class Book_ticket(models.Model):
     guest=models.ForeignKey(Guest,models.CASCADE,related_name='reservation')
     movie=models.ForeignKey(Movie,models.CASCADE,related_name='reservation')
-    price=models.IntegerField(default=0)
-
+    def __str__(self):
+        return self.guest.name

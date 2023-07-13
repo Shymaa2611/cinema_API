@@ -23,4 +23,5 @@ urlpatterns = [
     path('getGuest/api/',view=views.getGuest),
     path('getGuest/api/<int:pk>/',view=views.GuestData),
     path('search/api/',view=views.search_Movie),
+    path('book/api/',view=views.Book),
 ]
