@@ -3,7 +3,7 @@ from rest_framework.decorators import api_view,authentication_classes,permission
 from rest_framework import status, filters
 from rest_framework.response import Response
 from .models import Guest,Movie,Book_ticket
-from .serializers import GuestSerializers,Book_ticket_Serializers,MovieSerializers
+from .serializers import GuestSerializers,MovieSerializers
 from rest_framework.authentication import  TokenAuthentication
 from rest_framework.permissions import IsAuthenticated
 
@@ -22,7 +22,8 @@ def getGuest(request):
          return Response(serializer.data,status=status.HTTP_201_CREATED)
     return Response(serializer.data,status=status.HTTP_400_BAD_REQUEST)
 @api_view(['GET','PUT','DELETE'])
-
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 def GuestData(request,pk):
     guests=Guest.objects.get(pk=pk)
     if request.method=='GET':
@@ -37,7 +38,8 @@ def GuestData(request,pk):
     elif request.method=='DELETE':
        guests.delete()
        return Response(status=status.HTTP_204_NO_CONTENT)
-    
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])   
 @api_view(['GET'])
 def search_Movie(request):
    movie = Movie.objects.filter(
@@ -49,7 +51,8 @@ def search_Movie(request):
 
 
 
-
+@authentication_classes([TokenAuthentication])
+@permission_classes([IsAuthenticated])
 @api_view(['POST'])
 def Book(request):
    movie = Movie.objects.get(
